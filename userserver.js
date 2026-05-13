@@ -7,7 +7,7 @@ import cors from 'cors';
 
 import User from './Models/usermodel.js';
 
-dotenv.config();
+
 
 const app = express();
 
@@ -16,9 +16,11 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
   
+dotenv.config();
+
 mongoose.connect(process.env.MONGO_URI)
-.then(()=>console.log('Ammy Database Connected'))
-.catch((error)=>console.log(error));
+.then(() => console.log('MongoDB Connected'))
+.catch((error) => console.log(error));
 
     app.post('/users',async(req,res)=>{
         try {
@@ -55,7 +57,7 @@ mongoose.connect(process.env.MONGO_URI)
             },
         {new:true}
     );
-        res.status(400).json({message:'User Updated',user:updateUser});
+       res.status(200).json({message:'User Updated'});
         } catch (error) {
             res.status(404).json({message:'User cannot be Updated'});
         }
@@ -65,7 +67,7 @@ mongoose.connect(process.env.MONGO_URI)
     app.delete('/users/:id',async(req,res)=>{
         try {
             const deleteUser=await User.findByIdAndDelete(req.params.id);
-            res.status(202).json({message:'User Deleted'})
+           res.status(200).json({message:'User Deleted'});
         } catch (error) {
             res.status(500).json({message:'User cannot be Deleted'});
         }
@@ -121,7 +123,7 @@ mongoose.connect(process.env.MONGO_URI)
 
 
     function auth(req,res,next){
-        const token=req.header("Authorization")?.replace("Bearer","");
+       const token = req.header("Authorization")?.replace("Bearer ", "");
         if(!token) return   res.status(401).json({message:'No Token , Access Denied'});
         try {
             const verified=jwt.verify(token,"secretkey");
