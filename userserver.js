@@ -16,10 +16,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
   
-mongoose.connect(process.env.MONGO_URL,{
-    useNewUrlParser:true,
-    useUnifiedTopology:true
-})
+mongoose.connect(process.env.MONGO_URI)
 .then(()=>console.log('Ammy Database Connected'))
 .catch((error)=>console.log(error));
 
